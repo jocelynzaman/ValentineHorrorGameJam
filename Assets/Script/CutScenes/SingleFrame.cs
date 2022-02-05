@@ -15,6 +15,7 @@ public class SingleFrame : MonoBehaviour
     [SerializeField] private string speaker;
     [SerializeField] private string audioName;
     [SerializeField] private string[] text;
+    [SerializeField] private bool isAutoProgressFrame;
 
     //animation
     [SerializeField] private GameObject[] animations;
@@ -43,5 +44,10 @@ public class SingleFrame : MonoBehaviour
     public GameObject[] GetAnimations()
     {
         return animations;
+    }
+
+    public bool IsAutoProgressFrame()
+    {
+        return isAutoProgressFrame;
     }
 }
