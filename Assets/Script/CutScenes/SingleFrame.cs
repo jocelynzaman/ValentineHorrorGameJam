@@ -6,13 +6,18 @@
  *    1 visual frame
  *    list of text
  *    1 speaker
- *    audio (voiceover) - add later
+ *    audio (voiceover)
+ *    list of animation assets
  */
 public class SingleFrame : MonoBehaviour
 {
     [SerializeField] private Sprite visual;
-    [SerializeField] private string[] text;
     [SerializeField] private string speaker;
+    [SerializeField] private string audioName;
+    [SerializeField] private string[] text;
+
+    //animation
+    [SerializeField] private GameObject[] animations;
 
     //getters
     public Sprite GetVisual()
@@ -28,5 +33,15 @@ public class SingleFrame : MonoBehaviour
     public string GetSpeaker()
     {
         return speaker;
+    }
+
+    public string GetAudio()
+    {
+        return audioName;
+    }
+
+    public GameObject[] GetAnimations()
+    {
+        return animations;
     }
 }

@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
 /*
- * Progresses through a list of SingleFrame objects and iterates through each SingleFrame visual, text list, speaker, and audio
+ * Progresses through a list of SingleFrame objects and iterates through each SingleFrame components
  */
 public class Scene : MonoBehaviour
 {
@@ -17,30 +19,26 @@ public class Scene : MonoBehaviour
 
     public TextMeshProUGUI speaker;
 
+    private AudioSource audioClip;
+
+    private List<GameObject> animations;
+
     // Start is called before the first frame update
     void Start()
     {
         frameIndex = 0;
-        textIndex = 0;
+        animations = new List<GameObject>();
 
-        //set scene components: visual, text, speaker
-        visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
-        scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
-        speaker.text = frames[frameIndex].GetComponent<SingleFrame>().GetSpeaker();
-
+        SetSceneComponents();
         textIndex++;
     }
 
     public void StartScene()
     {
         frameIndex = 0;
-        textIndex = 0;
+        animations = new List<GameObject>();
 
-        //set scene components: visual, text, speaker
-        visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
-        scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
-        speaker.text = frames[frameIndex].GetComponent<SingleFrame>().GetSpeaker();
-
+        SetSceneComponents();
         textIndex++;
     }
 
@@ -54,28 +52,80 @@ public class Scene : MonoBehaviour
             {
                 scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
                 textIndex++;
-                print(frames[frameIndex].GetComponent<SingleFrame>().GetText().Length);
+                //print(frames[frameIndex].GetComponent<SingleFrame>().GetText().Length);
             }
             //no more text in current frame
             else
             {
-                //reset textIndex
-                textIndex = 0;
+                //disable player input on scene progression so audio finishes playing
+                scriptText.GetComponent<Button>().interactable = false;
 
-                frameIndex++;
+                if (audioClip != null)
+                {
+                    //wait for audio to finish
+                    StartCoroutine(WaitForAudio());
+                }
+                else
+                {
+                    scriptText.GetComponent<Button>().interactable = true;
 
-                //set visual, text, and speaker of next frame
-                visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
-                scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
-                speaker.text = frames[frameIndex].GetComponent<SingleFrame>().GetSpeaker();
-
-                textIndex++;
+                    DeleteAllAnimations();
+                    frameIndex++;
+                    SetSceneComponents();
+                }
             }
         }
         else
         {
+            //disable player input on scene progression
+            scriptText.GetComponent<Button>().interactable = false;
+
             //switch to gameplay screen
-            print("exit scene");
+            //print("exit scene");
         }
+
+        //wait for audio to finish playing before progressing to next frame
+        IEnumerator WaitForAudio()
+        {
+            yield return new WaitWhile(() => audioClip.isPlaying);
+
+            scriptText.GetComponent<Button>().interactable = true;
+
+            DeleteAllAnimations();
+            frameIndex++;
+            SetSceneComponents();            
+        }
+    }
+
+    //set up scene components of next frame
+    private void SetSceneComponents()
+    {
+        textIndex = 0;
+
+        //set visual, text, speaker, and audio of next frame
+        visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
+        scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
+        speaker.text = frames[frameIndex].GetComponent<SingleFrame>().GetSpeaker();
+        audioClip = FindObjectOfType<AudioManager>().Play(frames[frameIndex].GetComponent<SingleFrame>().GetAudio());
+
+        audioClip = FindObjectOfType<AudioManager>().Play(frames[frameIndex].GetComponent<SingleFrame>().GetAudio());
+
+        foreach (GameObject anim in frames[frameIndex].GetComponent<SingleFrame>().GetAnimations())
+        {
+            animations.Add(Instantiate(anim, anim.transform.position, Quaternion.identity));
+        }
+
+        textIndex++;
+    }
+
+    //delete all animations from current frame
+    private void DeleteAllAnimations()
+    {
+        foreach (GameObject anim in animations)
+        {
+            Destroy(anim);
+        }
+
+        animations.Clear();
     }
 }
