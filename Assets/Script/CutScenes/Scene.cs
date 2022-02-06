@@ -109,8 +109,10 @@ public class Scene : MonoBehaviour
 
             musicSource.Stop();
 
-            //switch to gameplay screen
+            //switch to mini game screen
             //print("exit scene");
+            GameManager.Instance.UpdateGameState(GameState.MiniGame);
+            gameObject.SetActive(false);
         }
     }
 
@@ -121,11 +123,9 @@ public class Scene : MonoBehaviour
     {
         yield return new WaitWhile(() => audioClip.isPlaying);
 
-        //scriptText.GetComponent<Button>().interactable = true;
-
         DeleteAllAnimations();
         frameIndex++;
-        //SetSceneComponents();            
+        
         ProgressScene();
     }
 

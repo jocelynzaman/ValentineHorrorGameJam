@@ -92,6 +92,7 @@ public class HeadMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("goal"))
         {
             print("player wins");
+            GameManager.Instance.UpdateGameState(GameState.CutScene);
         }
     }
 }
