@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  * Sets state for head mini game
@@ -23,6 +24,7 @@ public class HeadMiniGame : MonoBehaviour
 
     [SerializeField] private GameObject zHead;
     private HeadMovement headMovementScript;
+    private Button headButton;
 
     private bool isHeadClicked;
     private bool isFClicked;
@@ -35,6 +37,7 @@ public class HeadMiniGame : MonoBehaviour
         arrowScript = arrow.GetComponent<RotateAroundPivot>();
         powerMeterScript = powerMeter.GetComponent<ActivatePowerMeter>();
         headMovementScript = zHead.GetComponent<HeadMovement>();
+        headButton = zHead.GetComponent<Button>();
     }
 
     // Update is called once per frame
@@ -55,17 +58,47 @@ public class HeadMiniGame : MonoBehaviour
             //direction and speed for head movement
             headMovementScript.SetDirection(arrow.transform.position - zHead.transform.position);
             speedPercentage = powerMeterScript.GetPowerMeterValue();
+            print("speed percentage: " + speedPercentage);
 
             isHeadClicked = false;
+            headButton.interactable = false;
             arrow.GetComponent<SpriteRenderer>().enabled = false;
             powerMeterScript.ResetPowerMeter();
             isFClicked = true;
         }
-        
+        ////move zomboi head
+        //if (isFClicked)
+        //{
+        //    StartCoroutine(headMovementScript.MoveHead(headMovementScript.GetHeadMaxSpeed() * speedPercentage));
+        //    StartCoroutine(headMovementScript.LerpSpeed());
+
+        //    StartCoroutine(WaitForHeadToStop());
+        //}
     }
 
     void FixedUpdate()
     {
+        //if (!isHeadClicked)
+        //{
+        //    StartCoroutine(arrowScript.RotateArrow());
+        //}
+        ////wait for mouse click to stop arrow and activate power meter
+        //else
+        //{
+        //    StartCoroutine(powerMeterScript.ActivateMeter());
+        //}
+        ////fire zomboi head
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    //direction and speed for head movement
+        //    headMovementScript.SetDirection(arrow.transform.position - zHead.transform.position);
+        //    speedPercentage = powerMeterScript.GetPowerMeterValue();
+
+        //    isHeadClicked = false;
+        //    arrow.GetComponent<SpriteRenderer>().enabled = false;
+        //    powerMeterScript.ResetPowerMeter();
+        //    isFClicked = true;
+        //}
         //move zomboi head
         if (isFClicked)
         {
@@ -82,6 +115,7 @@ public class HeadMiniGame : MonoBehaviour
 
         isFClicked = false;
         isHeadClicked = false;
+        headButton.interactable = true;
         arrow.GetComponent<SpriteRenderer>().enabled = true;
     }
 
