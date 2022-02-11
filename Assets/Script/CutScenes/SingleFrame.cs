@@ -14,6 +14,8 @@ public class SingleFrame : MonoBehaviour
     [SerializeField] private Sprite visual;
     [SerializeField] private string speaker;
     [SerializeField] private string audioName;
+    [SerializeField] private bool isMoveTextToTop;
+    [SerializeField] private bool isMoveTextToRight;
     [SerializeField] private string[] text;
     [SerializeField] private bool isAutoProgressFrame;
 
@@ -24,6 +26,16 @@ public class SingleFrame : MonoBehaviour
     public Sprite GetVisual()
     {
         return visual;
+    }
+
+    public bool IsMoveTextToTop()
+    {
+        return isMoveTextToTop;
+    }
+
+    public bool IsMoveTextToRight()
+    {
+        return isMoveTextToRight;
     }
 
     public string[] GetText()

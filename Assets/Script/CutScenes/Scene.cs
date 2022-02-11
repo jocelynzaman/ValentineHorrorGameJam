@@ -27,6 +27,11 @@ public class Scene : MonoBehaviour
     /*[SerializeField] private bool autoProgressScene;*/
     private List<GameObject> animations;
 
+    private float speakerY;
+    private float speakerX;
+    private float scriptY;
+    private float scriptX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,11 +40,44 @@ public class Scene : MonoBehaviour
         musicSource = audioManager.Play(music);
         animations = new List<GameObject>();
 
+        speakerY = speaker.GetComponent<RectTransform>().anchoredPosition.y;
+        speakerX = speaker.GetComponent<RectTransform>().anchoredPosition.x;
+        scriptY = scriptText.GetComponent<RectTransform>().anchoredPosition.y;
+        scriptX = scriptText.GetComponent<RectTransform>().anchoredPosition.x;
+
         SetSceneComponents();
     }
 
     void Update()
     {
+        //move speaker and script text to the top of scene
+        if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToTop())
+        {
+            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 1030.0f);
+            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 950.0f);
+            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        }
+        else
+        {
+            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 220.0f);
+            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 120.0f);
+            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        }
+
+        //move speaker and script text to the right of scene
+        if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToRight())
+        {
+            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(1150.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
+            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(1370.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
+            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1010.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        }
+        else
+        {
+            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(330.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
+            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(930.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
+            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        }
+
         //auto progress scenes with no text
         if ((frameIndex < frames.Length) && frames[frameIndex].GetComponent<SingleFrame>().IsAutoProgressFrame())
         {
