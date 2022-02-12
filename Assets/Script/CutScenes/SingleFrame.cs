@@ -16,6 +16,7 @@ public class SingleFrame : MonoBehaviour
     [SerializeField] private string audioName;
     [SerializeField] private bool isMoveTextToTop;
     [SerializeField] private bool isMoveTextToRight;
+    [TextArea]
     [SerializeField] private string[] text;
     [SerializeField] private bool isAutoProgressFrame;
 

@@ -163,7 +163,10 @@ public class Scene : MonoBehaviour
 
         DeleteAllAnimations();
         frameIndex++;
-        
+
+        speaker.text = "";
+        scriptText.text = "";
+
         ProgressScene();
     }
 
