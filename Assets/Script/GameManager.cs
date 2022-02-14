@@ -7,6 +7,7 @@ public enum GameState
 {
     MainMenu,
     ControlScreen,
+    Credits,
     GamePlay,
     CutScene,
     MiniGame
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //UpdateGameState(GameState.MainMenu);
-        UpdateGameState(GameState.CutScene);
+        UpdateGameState(State);
     }
 
     public void UpdateGameState(GameState newState)
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
             case GameState.MainMenu:
                 break;
             case GameState.ControlScreen:
+                break;
+            case GameState.Credits:
                 break;
             case GameState.GamePlay:
                 break;
