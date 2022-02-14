@@ -6920,7 +6920,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0c6ebc4f06aa86c449d25afc826b405e, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10102,6 +10102,7 @@ MonoBehaviour:
   - {fileID: 594411855}
   - {fileID: 431132374}
   - {fileID: 865090757}
+  - {fileID: 0}
   - {fileID: 766360103}
   visual: {fileID: 470421833}
   scriptText: {fileID: 1512752324}
@@ -11283,7 +11284,8 @@ MonoBehaviour:
     not quite as he remembered it.\r"
   - Zombie boy, curious but still sad about his missing heart, opens the door.
   isAutoProgressFrame: 0
-  animations: []
+  animations:
+  - {fileID: 4059796723497133971, guid: 2ae703ce87b6b4146adc79b43145f0ec, type: 3}
 --- !u!1 &877374799
 GameObject:
   m_ObjectHideFlags: 0
