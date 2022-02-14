@@ -19,6 +19,10 @@ public class Scene : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI speaker;
 
+    [SerializeField] private GameObject textbox;
+    private RectTransform textboxRect;
+    private Image textboxImage;
+
     [SerializeField] private string music;
     private AudioSource musicSource;
     private AudioManager audioManager;
@@ -32,6 +36,9 @@ public class Scene : MonoBehaviour
     private float scriptY;
     private float scriptX;
 
+    private float textboxY;
+    private float textboxWidth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,61 +47,108 @@ public class Scene : MonoBehaviour
         musicSource = audioManager.Play(music);
         animations = new List<GameObject>();
 
-        speakerY = speaker.GetComponent<RectTransform>().anchoredPosition.y;
-        speakerX = speaker.GetComponent<RectTransform>().anchoredPosition.x;
-        scriptY = scriptText.GetComponent<RectTransform>().anchoredPosition.y;
-        scriptX = scriptText.GetComponent<RectTransform>().anchoredPosition.x;
+        textboxRect = textbox.GetComponent<RectTransform>();
+        textboxImage = textbox.GetComponent<Image>();
+        textboxY = -335.0f;
+        textboxWidth = 1820.0f;
+
+        //old text positioning
+        //speakerY = speaker.GetComponent<RectTransform>().anchoredPosition.y;
+        //speakerX = speaker.GetComponent<RectTransform>().anchoredPosition.x;
+        //scriptY = scriptText.GetComponent<RectTransform>().anchoredPosition.y;
+        //scriptX = scriptText.GetComponent<RectTransform>().anchoredPosition.x;
 
         SetSceneComponents();
     }
 
     void Update()
     {
-        //move speaker and script text to the top of scene
-        if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToTop())
-        {
-            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 1030.0f);
-            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 950.0f);
-            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
-        }
-        else
-        {
-            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 220.0f);
-            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 120.0f);
-            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
-        }
+        //OLD TEXT POSITIONING
+        ////move speaker and script text to the top of scene
+        //if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToTop())
+        //{
+        //    speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 1030.0f);
+        //    scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 950.0f);
+        //    scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        //}
+        //else
+        //{
+        //    speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(speakerX, 220.0f);
+        //    scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(scriptX, 120.0f);
+        //    scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        //}
 
-        //move speaker and script text to the right of scene
-        if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToRight())
-        {
-            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(1150.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
-            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(1370.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
-            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1010.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
-        }
-        else
-        {
-            speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(330.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
-            scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(930.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
-            scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
-        }
+        ////move speaker and script text to the right of scene
+        //if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToRight())
+        //{
+        //    speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(1150.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
+        //    scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(1370.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
+        //    scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1010.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        //}
+        //else
+        //{
+        //    speaker.GetComponent<RectTransform>().anchoredPosition = new Vector2(330.0f, speaker.GetComponent<RectTransform>().anchoredPosition.y);
+        //    scriptText.GetComponent<RectTransform>().anchoredPosition = new Vector2(930.0f, scriptText.GetComponent<RectTransform>().anchoredPosition.y);
+        //    scriptText.GetComponent<RectTransform>().sizeDelta = new Vector2(1776.0f, scriptText.GetComponent<RectTransform>().sizeDelta.y);
+        //}
 
-        //auto progress scenes with no text
-        if ((frameIndex < frames.Length) && frames[frameIndex].GetComponent<SingleFrame>().IsAutoProgressFrame())
+        //move textbox to desired position
+        //move textbox to the top of scene
+        if (frameIndex < frames.Length)
         {
-            scriptText.GetComponent<Button>().interactable = false;
-            if (animations[0].GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length <= animations[0].GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime)
+            if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToTop())
             {
-                frameIndex++;
-                if (frameIndex < frames.Length)
+                ResizeAndPositionTextbox(0.0f, 330.0f, textboxWidth);
+            }
+            //move textbox to the bottom of scene
+            else
+            {
+                ResizeAndPositionTextbox(0.0f, -335.0f, textboxWidth);
+            }
+
+            //move textbox to the right of scene
+            if (frames[frameIndex].GetComponent<SingleFrame>().IsMoveTextToRight())
+            {
+                ResizeAndPositionTextbox(406.0f, textboxRect.anchoredPosition.y, 1052.0f);
+            }
+            //move textbox to the center of scene
+            else
+            {
+                ResizeAndPositionTextbox(0.0f, textboxRect.anchoredPosition.y, textboxWidth);
+            }
+
+            //auto progress scenes with no text
+            if (frames[frameIndex].GetComponent<SingleFrame>().IsAutoProgressFrame())
+            {
+                scriptText.GetComponent<Button>().interactable = false;
+                if (animations[0].GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length <= animations[0].GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime)
                 {
+                    frameIndex++;
                     DeleteAllAnimations();
-                    SetSceneComponents();
-                    scriptText.GetComponent<Button>().interactable = true;
+                    ProgressScene();
+                    //if (frameIndex < frames.Length)
+                    //{
+                    //    DeleteAllAnimations();
+                    //    SetSceneComponents();
+                    //scriptText.GetComponent<Button>().interactable = false;
+                    //}
                 }
             }
         }
+        else
+        {
+            ProgressScene();
+        }
     }
 
+
+    private void ResizeAndPositionTextbox(float posX, float posY, float width)
+    {
+        textboxRect.anchoredPosition = new Vector2(posX, posY);
+        textboxRect.sizeDelta = new Vector2(width, textboxRect.sizeDelta.y);
+    }
+
+    //remove? doesn't look it's used
     public void StartScene()
     {
         frameIndex = 0;
@@ -103,6 +157,7 @@ public class Scene : MonoBehaviour
         SetSceneComponents();
     }
 
+    //Player clicks text box
     public void ProgressText()
     {
         //if text is left in the current frame, then change text to next script line
@@ -124,6 +179,7 @@ public class Scene : MonoBehaviour
             }
             else
             {
+
                 DeleteAllAnimations();
                 frameIndex++;
 
@@ -132,7 +188,6 @@ public class Scene : MonoBehaviour
         }
     }
 
-    //Player clicks text box
     public void ProgressScene()
     {
         if (frameIndex < frames.Length)
@@ -148,7 +203,7 @@ public class Scene : MonoBehaviour
             musicSource.Stop();
 
             //switch to mini game screen
-            //print("exit scene");
+            print("exit scene");
             GameManager.Instance.UpdateGameState(GameState.MiniGame);
             gameObject.SetActive(false);
         }
@@ -166,6 +221,7 @@ public class Scene : MonoBehaviour
 
         speaker.text = "";
         scriptText.text = "";
+        audioClip = null;
 
         ProgressScene();
     }
@@ -177,13 +233,35 @@ public class Scene : MonoBehaviour
 
         //set visual, text, speaker, and audio of next frame
         visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
+
+        //var textboxColor = textboxImage.color;
+
         if (frames[frameIndex].GetComponent<SingleFrame>().GetText().Length > 0)
         {
             scriptText.text = frames[frameIndex].GetComponent<SingleFrame>().GetText()[textIndex];
+            //textboxColor.a = 1.0f;
+            textboxImage.enabled = true;
+            
         }
+        else
+        {
+            //textboxColor.a = 0.0f;
+            textboxImage.enabled = false;
+        }
+        //textboxImage.color = textboxColor;
 
         speaker.text = frames[frameIndex].GetComponent<SingleFrame>().GetSpeaker();
-        audioClip = audioManager.Play(frames[frameIndex].GetComponent<SingleFrame>().GetAudio());
+
+        if (frames[frameIndex].GetComponent<SingleFrame>().GetAudio().Equals(""))
+        {
+            audioClip = null;
+            print("audioclip is null");
+        }
+        else
+        {
+            audioClip = audioManager.Play(frames[frameIndex].GetComponent<SingleFrame>().GetAudio());
+        }
+        
 
         foreach (GameObject anim in frames[frameIndex].GetComponent<SingleFrame>().GetAnimations())
         {
