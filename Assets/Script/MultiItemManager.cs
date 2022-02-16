@@ -39,5 +39,9 @@ public class MultiItemManager : MonoBehaviour
                 itemIndex++;
             }
         }
+        //else
+        //{
+        //    Application.Quit();
+        //}
     }
 }
