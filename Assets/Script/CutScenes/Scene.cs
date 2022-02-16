@@ -179,7 +179,6 @@ public class Scene : MonoBehaviour
             }
             else
             {
-
                 DeleteAllAnimations();
                 frameIndex++;
 
@@ -219,8 +218,8 @@ public class Scene : MonoBehaviour
         DeleteAllAnimations();
         frameIndex++;
 
-        speaker.text = "";
-        scriptText.text = "";
+        //speaker.text = "";
+        //scriptText.text = "";
         audioClip = null;
 
         ProgressScene();
@@ -230,6 +229,9 @@ public class Scene : MonoBehaviour
     private void SetSceneComponents()
     {
         textIndex = 0;
+
+        speaker.text = "";
+        scriptText.text = "";
 
         //set visual, text, speaker, and audio of next frame
         visual.sprite = frames[frameIndex].GetComponent<SingleFrame>().GetVisual();
