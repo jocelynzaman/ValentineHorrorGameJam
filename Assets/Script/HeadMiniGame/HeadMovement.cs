@@ -15,11 +15,16 @@ public class HeadMovement : MonoBehaviour
     private bool isAccelerate;
     private Vector2 currentDirection;
 
+    [SerializeField] private GameObject minigame;
+    private HeadMiniGame minigameScript;
+
     void Start()
     {
         acceleration = 2.0f;
         isAccelerate = true;
         currentSpeed = 0;
+
+        minigameScript = minigame.GetComponent<HeadMiniGame>();
     }
 
     public IEnumerator MoveHead(float maxSpeed)
@@ -36,7 +41,6 @@ public class HeadMovement : MonoBehaviour
     {
         if (isAccelerate)
         {
-
             if (currentSpeed < acceleration)
             {
                 currentSpeed = currentSpeed + acceleration * Time.deltaTime;
@@ -83,7 +87,7 @@ public class HeadMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D coll)
     {
         Vector2 contactNormal = coll.contacts[0].normal;
-        currentDirection = Vector2.Reflect(currentDirection, contactNormal).normalized;
+        currentDirection = Vector2.Reflect(currentDirection, contactNormal).normalized;        
     }
 
     //if zomboihead triggers goal area, player wins
@@ -92,6 +96,7 @@ public class HeadMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("goal"))
         {
             print("player wins");
+            minigameScript.StopMusic();
             GameManager.Instance.UpdateGameState(GameState.CutScene);
         }
     }

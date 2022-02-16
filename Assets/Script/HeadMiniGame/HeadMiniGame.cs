@@ -29,6 +29,11 @@ public class HeadMiniGame : MonoBehaviour
     private bool isHeadClicked;
     private bool isFClicked;
 
+    //music
+    [SerializeField] private string music;
+    private AudioSource musicSource;
+    private AudioManager audioManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +43,9 @@ public class HeadMiniGame : MonoBehaviour
         powerMeterScript = powerMeter.GetComponent<ActivatePowerMeter>();
         headMovementScript = zHead.GetComponent<HeadMovement>();
         headButton = zHead.GetComponent<Button>();
+
+        audioManager = FindObjectOfType<AudioManager>();
+        musicSource = audioManager.Play(music);
     }
 
     // Update is called once per frame
@@ -122,5 +130,10 @@ public class HeadMiniGame : MonoBehaviour
     public void HeadClicked()
     {
         isHeadClicked = true;
+    }
+
+    public void StopMusic()
+    {
+        musicSource.Stop();
     }
 }
