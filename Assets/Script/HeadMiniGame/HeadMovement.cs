@@ -39,6 +39,11 @@ public class HeadMovement : MonoBehaviour
     //accelerate speed to maxSpeed from MoveHead(), then decelerate
     public IEnumerator LerpSpeed()
     {
+        if (acceleration == 0.0f)
+        {
+            currentSpeed = 0;
+            isAccelerate = false;
+        }
         if (isAccelerate)
         {
             if (currentSpeed < acceleration)
